@@ -11,6 +11,9 @@ export default function Signup() {
 
   const [loading, setLoading] = useState(false);
 
+  const [error, setError] = useState({ state: false, message: "" });
+  const [success, setSuccess] = useState({state: false, message: ""})
+
   const handleFormData = (e) => {
     setFormData({
       ...formData,
@@ -22,6 +25,8 @@ export default function Signup() {
     e.preventDefault();
 
     setLoading(true);
+    setError({state: false, message: "" });
+    setSuccess({state: false, message: ""});
 
     try {
       const response = await axios({
@@ -37,7 +42,7 @@ export default function Signup() {
         },
       });
 
-      console.log(response);
+      setSuccess({state: response.data.success , message : response.data.message});
 
       setFormData({
         username: "",
@@ -45,8 +50,9 @@ export default function Signup() {
         password: "",
       });
       setLoading(false);
-    } catch (error) {
-      console.log(error);
+    } 
+    catch (error) {
+      setError({state: true, message: error.response.data.message});
       setLoading(false);
     }
   };
@@ -56,7 +62,7 @@ export default function Signup() {
       <h1 className="text-3xl font-semibold mb-4">SignUp Yourself</h1>
 
       <form
-        className="flex flex-col items-center gap-2"
+        className="flex flex-col items-center gap-2 w-[21rem]"
         onSubmit={handleSubmit}
       >
         <div className="flex flex-col">
@@ -103,6 +109,18 @@ export default function Signup() {
             required
           />
         </div>
+
+        {error.state && (
+          <div>
+            <p className="w-full text-sm text-red-500 relative top-2 px-1 ">{error.message} !</p>
+          </div>
+        )}
+
+        {success.state && (
+          <div>
+            <p className="w-full text-sm text-green-500 relative top-2 px-1">{success.message} !</p>
+          </div>
+        )}
 
         <button
           className={`bg-gradient-to-r  w-full mt-4 py-2 px-3 rounded-md font-medium text-lg text-white ${
