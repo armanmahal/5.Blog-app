@@ -65,7 +65,7 @@ export default function Signup() {
         className="flex flex-col items-center gap-2 w-[21rem]"
         onSubmit={handleSubmit}
       >
-        <div className="flex flex-col">
+        <div className="flex flex-col w-full">
           <label htmlFor="username" className="ml-1 text-[15px]">
             Create Username
           </label>
@@ -80,7 +80,7 @@ export default function Signup() {
           />
         </div>
 
-        <div className="flex flex-col">
+        <div className="flex flex-col w-full">
           <label htmlFor="email" className="ml-1 text-[15px]">
             Enter Email
           </label>
@@ -95,7 +95,7 @@ export default function Signup() {
           />
         </div>
 
-        <div className="flex flex-col">
+        <div className="flex flex-col w-full">
           <label htmlFor="password" className="ml-1 text-[15px]">
             Create Password
           </label>
