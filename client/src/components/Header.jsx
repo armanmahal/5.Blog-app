@@ -22,15 +22,18 @@ export default function Header() {
   };
 
   return (
-    <div className="border-black border-2 px-2 py-3 flex gap-5 items-center justify-between relative">
+    <div className="border-black border-b-2 bg-purple-50 px-2 py-3 flex gap-5 items-center justify-between relative">
       {/* LOGO */}
       <div className="hidden md:block text-[1.5rem] font-semibold md:pl-2 lg:pl-4">
-        BlogAPP
+        <span className="bg-pink-500 px-[6px] text-white mr-[1px] py-[4px] rounded-md shadow-custom-logo shadow-pink-400">
+          Blog
+        </span>
+        APP
       </div>
 
       {/* SEARCHBAR */}
       <form
-        className="border-2 border-gray-400 p-1 rounded-md flex justify-between ml-2 md:w-[40%]"
+        className="border-2 border-gray-400 p-1 bg-white rounded-md flex justify-between ml-2 md:w-[40%]"
         onSubmit={handleSubmit}
       >
         <input
@@ -44,7 +47,7 @@ export default function Header() {
           }}
           className="border-none focus:outline-none md:w-[90%]"
         />
-        <button className="pr-2">
+        <button className="pr-2 md:hover:text-pink-500">
           <FaSearch />
         </button>
       </form>
@@ -55,31 +58,31 @@ export default function Header() {
           to={"/"}
           className={path === "/" ? "underline underline-offset-2" : ""}
         >
-          Home
+          <p className=" hover:text-gray-600">Home</p>
         </Link>
         <Link
           to={"/about"}
           className={path === "/about" ? "underline underline-offset-2" : ""}
         >
-          About
+          <p className=" hover:text-gray-600">About</p>
         </Link>
         <Link
           to={"/projects"}
           className={path === "/projects" ? "underline underline-offset-2" : ""}
         >
-          Projects
+          <p className=" hover:text-gray-600">Projects</p>
         </Link>
         {currentUser === null ? (
           <Link
             to={"/signin"}
             className={path === "/signin" ? "underline underline-offset-2" : ""}
           >
-            SignIn
+            <p className=" hover:text-gray-600">Signin</p>
           </Link>
         ) : (
           <Link to={"/dashboard?tab=profile"}>
             <img
-              className="w-10 h-10 border-black border-2 rounded-[50%]"
+              className="w-10 h-10 border-black border-2 rounded-[50%] hover:shadow-custom-logo hover:shadow-gray-400"
               src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
               alt="DP"
             ></img>
@@ -92,33 +95,42 @@ export default function Header() {
         onClick={() => {
           setNavIsOpen(!navIsOpen);
         }}
-        className="md:hidden mr-4 border-2 p-2 rounded-md"
+        className="md:hidden mr-4 border-2 p-2 rounded-md border-gray-300"
       >
         {navIsOpen ? <FaChevronUp /> : <FaGripLines />}
       </button>
 
       <div
-        className={`md:hidden border-2 border-black absolute top-[100%] right-[-2px] w-[100vw] flex flex-col gap-1 bg-white py-2 ${
+        className={`md:hidden border-2 border-black absolute top-[100%] right-0 w-[100vw] flex flex-col gap-1 bg-white py-2 ${
           navIsOpen ? "" : "hidden"
         }`}
       >
-        <div
-          className={
-            path === "/signin"
-              ? "bg-gradient-to-l from-white via-gray-200 to-white  w-full flex items-center justify-center py-1 text-lg"
-              : "w-full flex items-center justify-center py-1 text-lg"
-          }
-        >
-          {currentUser === null ? (
+        {currentUser === null ? (
+          <div
+            className={
+              path === "/signin"
+                ? "bg-gradient-to-l from-white via-purple-200 to-white  w-full flex items-center justify-center py-1 text-lg"
+                : "w-full flex items-center justify-center py-1 text-lg"
+            }
+          >
             <Link to={"/signin"}>SignIn</Link>
-          ) : (
-            <Link to={"/dashboard?tab=profile"}>Profile</Link>
-          )}
-        </div>
+          </div>
+        ) : (
+          <div
+            className={
+              path === "/dashboard"
+                ? "bg-gradient-to-l from-white via-purple-200 to-white  w-full flex items-center justify-center py-1 text-lg"
+                : "w-full flex items-center justify-center py-1 text-lg"
+            }
+          >
+            <Link to={"/dashboard?tab=profile"}>Dashboard</Link>
+          </div>
+        )}
+
         <div
           className={
             path === "/"
-              ? "bg-gradient-to-l from-white via-gray-200 to-white  w-full flex items-center justify-center py-1 text-lg"
+              ? "bg-gradient-to-l from-white via-purple-200 to-white  w-full flex items-center justify-center py-1 text-lg"
               : "w-full flex items-center justify-center py-1 text-lg"
           }
         >
@@ -127,7 +139,7 @@ export default function Header() {
         <div
           className={
             path === "/about"
-              ? "bg-gradient-to-l from-white via-gray-200 to-white  w-full flex items-center justify-center py-1 text-lg"
+              ? "bg-gradient-to-l from-white via-purple-200 to-white  w-full flex items-center justify-center py-1 text-lg"
               : "w-full flex items-center justify-center py-1 text-lg"
           }
         >
@@ -136,7 +148,7 @@ export default function Header() {
         <div
           className={
             path === "/projects"
-              ? "bg-gradient-to-l from-white via-gray-200 to-white  w-full flex items-center justify-center py-1 text-lg"
+              ? "bg-gradient-to-l from-white via-purple-200 to-white  w-full flex items-center justify-center py-1 text-lg"
               : "w-full flex items-center justify-center py-1 text-lg"
           }
         >
