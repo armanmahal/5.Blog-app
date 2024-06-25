@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { FaSearch, FaGripLines, FaChevronUp } from "react-icons/fa";
-import { Link, useLocation} from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function Header() {
-    
   const [search, setSearch] = useState("");
   const [navIsOpen, setNavIsOpen] = useState(false);
 
   const path = useLocation().pathname;
+
+  const currentUser = useSelector((state) => state.user.currentUser);
 
   useEffect(() => {
     setNavIsOpen(false);
@@ -21,8 +23,6 @@ export default function Header() {
 
   return (
     <div className="border-black border-2 px-2 py-3 flex gap-5 items-center justify-between relative">
-
-
       {/* LOGO */}
       <div className="hidden md:block text-[1.5rem] font-semibold md:pl-2 lg:pl-4">
         BlogAPP
@@ -69,12 +69,22 @@ export default function Header() {
         >
           Projects
         </Link>
-        <Link
-          to={"/signin"}
-          className={path === "/signin" ? "underline underline-offset-2" : ""}
-        >
-          SignIn
-        </Link>
+        {currentUser === null ? (
+          <Link
+            to={"/signin"}
+            className={path === "/signin" ? "underline underline-offset-2" : ""}
+          >
+            SignIn
+          </Link>
+        ) : (
+          <Link to={"/dashboard?tab=profile"}>
+            <img
+              className="w-10 h-10 border-black border-2 rounded-[50%]"
+              src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+              alt="DP"
+            ></img>
+          </Link>
+        )}
       </div>
 
       {/* NAVIAGATION FOR SMALL SCREEN */}
@@ -99,7 +109,11 @@ export default function Header() {
               : "w-full flex items-center justify-center py-1 text-lg"
           }
         >
-          <Link to={"/signin"}>SignIn</Link>
+          {currentUser === null ? (
+            <Link to={"/signin"}>SignIn</Link>
+          ) : (
+            <Link to={"/dashboard?tab=profile"}>Profile</Link>
+          )}
         </div>
         <div
           className={
@@ -129,8 +143,6 @@ export default function Header() {
           <Link to={"/projects"}>Projects</Link>
         </div>
       </div>
-
-
     </div>
   );
 }
