@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useDispatch } from "react-redux";
+import { signInSuccess } from "../redux/user/userSlice";
 
 export default function Signin() {
   const [formData, setFormData] = useState({
@@ -14,6 +16,8 @@ export default function Signin() {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
 
   const [error, setError] = useState({ state: false, message: "" });
 
@@ -44,6 +48,8 @@ export default function Signin() {
         withCredentials: true,
       });
 
+      dispatch(signInSuccess(response.data.user));
+
       toast(response.data.message);
       //redirect after 1 second:
       setTimeout(() => {
@@ -54,9 +60,9 @@ export default function Signin() {
         });
         setLoading(false);
       }, 1000);
-
     } catch (error) {
-      setError({ state: true, message: error.response.data.message });
+      // setError({ state: true, message: error.response.data.message });
+      console.log(error);
       setLoading(false);
     }
   };
