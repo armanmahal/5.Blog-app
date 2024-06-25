@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Signin() {
   const [formData, setFormData] = useState({
@@ -26,10 +28,9 @@ export default function Signin() {
     e.preventDefault();
 
     setLoading(true);
-    setError({state: false, message: "" });
+    setError({ state: false, message: "" });
 
     try {
-      
       const response = await axios({
         url: `${process.env.REACT_APP_APIBASEURL}/api/auth/signin`,
         method: "POST",
@@ -41,31 +42,34 @@ export default function Signin() {
           password: formData.password,
         },
         withCredentials: true,
-      })
-
-      navigate('/');
-
-      setFormData({
-        email: "",
-        password: "",
       });
-      setLoading(false);
-    } 
-    catch (error) {
-      setError({state: true, message: error.response.data.message});
+
+      toast(response.data.message);
+      //redirect after 1 second:
+      setTimeout(() => {
+        navigate("/");
+        setFormData({
+          email: "",
+          password: "",
+        });
+        setLoading(false);
+      }, 1000);
+
+    } catch (error) {
+      setError({ state: true, message: error.response.data.message });
       setLoading(false);
     }
   };
 
   return (
     <div className="flex flex-col items-center mt-[20vh]">
+      <ToastContainer />
       <h1 className="text-3xl font-semibold mb-4">SignIn Yourself</h1>
 
       <form
         className="flex flex-col items-center gap-2 w-[21rem]"
         onSubmit={handleSubmit}
       >
-
         <div className="flex flex-col w-full">
           <label htmlFor="email" className="ml-1 text-[15px]">
             Enter Email
@@ -98,10 +102,11 @@ export default function Signin() {
 
         {error.state && (
           <div>
-            <p className="w-full text-sm text-red-500 relative top-2 px-1 ">{error.message} !</p>
+            <p className="w-full text-sm text-red-500 relative top-2 px-1 ">
+              {error.message} !
+            </p>
           </div>
         )}
-
 
         <button
           className={`bg-gradient-to-r  w-full mt-4 py-2 px-3 rounded-md font-medium text-lg text-white ${
