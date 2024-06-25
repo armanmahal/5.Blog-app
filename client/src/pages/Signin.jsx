@@ -40,6 +40,7 @@ export default function Signin() {
           email: formData.email,
           password: formData.password,
         },
+        withCredentials: true,
       })
 
       navigate('/');
