@@ -28,6 +28,8 @@ export const signup = async (req, res) => {
       username,
       email,
       password: hashedPass,
+      image:
+        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
     });
 
     res.json({
@@ -77,6 +79,7 @@ export const signin = async (req, res) => {
         id: validUser._id,
         username: validUser.username,
         email: validUser.email,
+        image: validUser.image,
       },
     });
   } catch (error) {
