@@ -27,7 +27,7 @@ export default function Dashboard() {
       {/* SIDEBAR FOR SMALL SCREEN*/}
 
       <div
-        className={`w-[70%] absolute ${
+        className={`w-[70%] absolute z-40 ${
           showMenu ? "left-0" : "left-[-72%]"
         } transition-all`}
       >
@@ -42,7 +42,7 @@ export default function Dashboard() {
 
       {/* PROFILE */}
       {tab === "profile" && (
-        <div className="w-full md:w-[600px]">
+        <div className="w-full">
           <DashboardProfile />
         </div>
       )}

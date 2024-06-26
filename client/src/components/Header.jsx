@@ -101,7 +101,7 @@ export default function Header() {
       </button>
 
       <div
-        className={`md:hidden border-2 border-black absolute top-[100%] right-0 w-[100vw] flex flex-col gap-1 bg-white py-2 ${
+        className={`md:hidden border-2 border-black absolute z-50 top-[100%] right-0 w-[100vw] flex flex-col gap-1 bg-white py-2 ${
           navIsOpen ? "" : "hidden"
         }`}
       >
