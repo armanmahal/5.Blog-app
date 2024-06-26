@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { LuRefreshCcw } from "react-icons/lu";
 import {
   getDownloadURL,
@@ -10,17 +10,22 @@ import {
 import { app } from "../firebase.js";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { updateUserImage } from "../redux/user/userSlice.js";
+import axios from "axios";
 
 export default function DashboardProfile() {
   const currentUser = useSelector((state) => state.user.currentUser);
 
   const [image, setImage] = useState("");
   const [temporaryImageUrl, setTemporaryImageUrl] = useState("");
+  const [uploadedImageUrl, setUploadedImageUrl] = useState("");
 
   const [data, setData] = useState({
     username: currentUser.username,
     email: currentUser.email,
   });
+
+  const dispatch = useDispatch();
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -51,11 +56,33 @@ export default function DashboardProfile() {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) => {
           setTemporaryImageUrl(downloadUrl);
+          updateUserImageDatabase(downloadUrl);
           toast("Image successfully changed");
           setImage("");
         });
       }
     );
+  };
+
+  // UPDATING USER IMAGE IN DATABASE
+  const updateUserImageDatabase = async (imageUrl) => {
+    try {
+      const response = await axios({
+        url: `${process.env.REACT_APP_APIBASEURL}/api/user/updateImage/${currentUser.id}`,
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: {
+          image: imageUrl,
+        },
+        withCredentials: true,
+      });
+      dispatch(updateUserImage(response.data.newImageUrl));
+    } catch (error) {
+      toast("User Update Failed");
+      console.log(error);
+    }
   };
 
   return (
@@ -67,9 +94,7 @@ export default function DashboardProfile() {
           <img
             className="w-[90px] h-[90px] border-black border-2 rounded-[50%]"
             src={
-              temporaryImageUrl !== ""
-                ? temporaryImageUrl
-                : currentUser.image
+              temporaryImageUrl !== "" ? temporaryImageUrl : currentUser.image
             }
             alt="DP"
           ></img>

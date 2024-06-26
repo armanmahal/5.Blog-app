@@ -11,9 +11,12 @@ const userSlice = createSlice({
     signInSuccess: (state, action) => {
       state.currentUser = action.payload;
     },
+    updateUserImage: (state, action) => {
+      state.currentUser.image = action.payload;
+    },
   },
 });
 
-export const { signInSuccess } = userSlice.actions;
+export const { signInSuccess, updateUserImage } = userSlice.actions;
 
 export default userSlice.reducer;
