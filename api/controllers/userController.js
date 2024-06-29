@@ -72,6 +72,7 @@ export const deleteUser = async (req, res) => {
 
   try {
     await User.findByIdAndDelete(req.user.id);
+    res.cookie("jwt_token", "", { expires: new Date(0) });
     res
       .status(200)
       .json({ success: true, message: "User Deleted Successfully" });
