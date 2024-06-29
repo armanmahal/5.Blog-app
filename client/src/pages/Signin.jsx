@@ -61,7 +61,7 @@ export default function Signin() {
         setLoading(false);
       }, 1000);
     } catch (error) {
-      // setError({ state: true, message: error.response.data.message });
+      setError({ state: true, message: error.response.data.message });
       console.log(error);
       setLoading(false);
     }

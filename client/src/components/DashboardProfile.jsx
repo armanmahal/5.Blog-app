@@ -69,6 +69,28 @@ export default function DashboardProfile() {
 
   const handlePasswordChange = async (e) => {
     e.preventDefault();
+
+    try {
+      const response = await axios({
+        url: `${process.env.REACT_APP_APIBASEURL}/api/user/updatePassword/${currentUser.id}`,
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: {
+          password: pass,
+        },
+        withCredentials: true,
+      });
+      toast(response.data.message);
+      setPass("");
+      setPasswordChange(false);
+    } catch (error) {
+      toast("Password Update Failed");
+      setPass("");
+      setPasswordChange(false);
+      console.log(error);
+    }
   };
 
   // UPDATING USER IMAGE IN DATABASE
