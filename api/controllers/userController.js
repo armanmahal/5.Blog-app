@@ -64,3 +64,20 @@ export const updatePassword = async (req, res) => {
       .json({ success: false, message: "Internal Server Error" });
   }
 };
+
+export const deleteUser = async (req, res) => {
+  if (req.params.userId !== req.user.id) {
+    return res.status(401).json({ success: false, message: "Unauthorized" });
+  }
+
+  try {
+    await User.findByIdAndDelete(req.user.id);
+    res
+      .status(200)
+      .json({ success: true, message: "User Deleted Successfully" });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error" });
+  }
+};
