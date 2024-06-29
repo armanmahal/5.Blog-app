@@ -20,6 +20,9 @@ export default function DashboardProfile() {
   const [temporaryImageUrl, setTemporaryImageUrl] = useState("");
   const [uploadedImageUrl, setUploadedImageUrl] = useState("");
 
+  const [passwordChange, setPasswordChange] = useState(false);
+  const [pass, setPass] = useState("");
+
   const [data, setData] = useState({
     username: currentUser.username,
     email: currentUser.email,
@@ -62,6 +65,10 @@ export default function DashboardProfile() {
         });
       }
     );
+  };
+
+  const handlePasswordChange = async (e) => {
+    e.preventDefault();
   };
 
   // UPDATING USER IMAGE IN DATABASE
@@ -145,12 +152,46 @@ export default function DashboardProfile() {
       </div>
 
       {/* CHANGE PASSWORD BUTTON */}
-      <button
-        className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-2 py-1 rounded-md mt-2 md:hover:shadow-custom-logo md:hover:shadow-pink-300"
-        onClick={null}
-      >
-        Change Password
-      </button>
+      <div className="flex flex-col items-center">
+        {passwordChange && (
+          <form
+            className="flex flex-col items-center"
+            onSubmit={handlePasswordChange}
+          >
+            <input
+              type="text"
+              name="password"
+              id="password"
+              placeholder="Enter New Password"
+              className="border-2 border-gray-500 px-2"
+              value={pass}
+              onChange={(e) => setPass(e.target.value)}
+            />
+            <button className="bg-green-400 px-2 py-1 mt-2 rounded-md">
+              Confirm
+            </button>
+            <button
+              type="button"
+              className="bg-red-400 px-2 py-1 mt-2 rounded-md"
+              onClick={() => {
+                setPasswordChange(false);
+                setPass("");
+              }}
+            >
+              Cancel
+            </button>
+          </form>
+        )}
+
+        {!passwordChange && (
+          <button
+            className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-2 py-1 rounded-md mt-2 md:hover:shadow-custom-logo md:hover:shadow-pink-300"
+            onClick={() => setPasswordChange(true)}
+          >
+            Change Password
+          </button>
+        )}
+      </div>
 
       <div className="mt-1 flex flex-col gap-2 justify-center items-center">
         {/* DELETE ACCOUNT BUTTON */}
