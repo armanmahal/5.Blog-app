@@ -10,12 +10,15 @@ import {
 import { app } from "../firebase.js";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { updateUserImage } from "../redux/user/userSlice.js";
+import { signOutUser, updateUserImage } from "../redux/user/userSlice.js";
 import axios from "axios";
 import DeleteUserPopup from "./deleteUserPopup.jsx";
+import { useNavigate } from "react-router-dom";
 
 export default function DashboardProfile() {
   const currentUser = useSelector((state) => state.user.currentUser);
+
+  const navigate = useNavigate();
 
   const [image, setImage] = useState("");
   const [temporaryImageUrl, setTemporaryImageUrl] = useState("");
@@ -114,6 +117,29 @@ export default function DashboardProfile() {
     } catch (error) {
       toast("User Update Failed");
       console.log(error);
+    }
+  };
+
+  const handleSignout = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios({
+        url: `${process.env.REACT_APP_APIBASEURL}/api/user/signoutUser`,
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+
+      if (response.data.success) {
+        dispatch(signOutUser());
+        navigate("/signin");
+      }
+    } catch (error) {
+      console.log(error);
+      toast("Signout Failed");
     }
   };
 
@@ -242,7 +268,7 @@ export default function DashboardProfile() {
         {/* SIGNOUT BUTTON */}
         <button
           className="border-2 border-red-400 px-2 py-[2px] rounded-md md:hover:bg-red-400 md:hover:text-white"
-          onClick={null}
+          onClick={handleSignout}
         >
           Sign Out
         </button>

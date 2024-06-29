@@ -82,3 +82,16 @@ export const deleteUser = async (req, res) => {
       .json({ success: false, message: "Internal Server Error" });
   }
 };
+
+export const signoutUser = async (req, res) => {
+  try {
+    res.cookie("jwt_token", "", { expires: new Date(0) });
+    res
+      .status(200)
+      .json({ success: true, message: "User SignedOut Successfully" });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error" });
+  }
+};
