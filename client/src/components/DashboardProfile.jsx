@@ -12,6 +12,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { updateUserImage } from "../redux/user/userSlice.js";
 import axios from "axios";
+import DeleteUserPopup from "./deleteUserPopup.jsx";
 
 export default function DashboardProfile() {
   const currentUser = useSelector((state) => state.user.currentUser);
@@ -23,9 +24,11 @@ export default function DashboardProfile() {
   const [passwordChange, setPasswordChange] = useState(false);
   const [pass, setPass] = useState("");
 
+  const [deleteAccountPopup, setDeleteAccountPopup] = useState(false);
+
   const [data, setData] = useState({
-    username: currentUser.username,
-    email: currentUser.email,
+    username: currentUser ? currentUser.username : "",
+    email: currentUser ? currentUser.email : "",
   });
 
   const dispatch = useDispatch();
@@ -123,7 +126,11 @@ export default function DashboardProfile() {
           <img
             className="w-[90px] h-[90px] border-black border-2 rounded-[50%]"
             src={
-              temporaryImageUrl !== "" ? temporaryImageUrl : currentUser.image
+              temporaryImageUrl !== ""
+                ? temporaryImageUrl
+                : currentUser
+                ? currentUser.image
+                : null
             }
             alt="DP"
           ></img>
@@ -215,11 +222,20 @@ export default function DashboardProfile() {
         )}
       </div>
 
+      {/* DELETE ACCOUNT POPUP */}
+      <div
+        className={`fixed transition-all ${
+          deleteAccountPopup ? "top-[40vh]" : "top-[-150px]"
+        } `}
+      >
+        <DeleteUserPopup cancel={() => setDeleteAccountPopup(false)} />
+      </div>
+
       <div className="mt-1 flex flex-col gap-2 justify-center items-center">
         {/* DELETE ACCOUNT BUTTON */}
         <button
           className="border-2 border-red-400 px-2 py-[2px] rounded-md md:hover:bg-red-400 md:hover:text-white"
-          onClick={null}
+          onClick={() => setDeleteAccountPopup(true)}
         >
           Delete Account
         </button>
