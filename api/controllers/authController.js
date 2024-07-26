@@ -69,7 +69,10 @@ export const signin = async (req, res) => {
     }
 
     //creating a jwt token:
-    const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
+    const token = jwt.sign(
+      { id: validUser._id, isAdmin: validUser.isAdmin },
+      process.env.JWT_SECRET
+    );
 
     res.cookie("jwt_token", token, { httpOnly: true, secure: true });
     res.status(200).json({
@@ -80,6 +83,7 @@ export const signin = async (req, res) => {
         username: validUser.username,
         email: validUser.email,
         image: validUser.image,
+        isAdmin: validUser.isAdmin,
       },
     });
   } catch (error) {
