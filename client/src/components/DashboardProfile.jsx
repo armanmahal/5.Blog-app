@@ -13,7 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { signOutUser, updateUserImage } from "../redux/user/userSlice.js";
 import axios from "axios";
 import DeleteUserPopup from "./deleteUserPopup.jsx";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function DashboardProfile() {
   const currentUser = useSelector((state) => state.user.currentUser);
@@ -247,6 +247,15 @@ export default function DashboardProfile() {
           </button>
         )}
       </div>
+
+      {/* CREATE POST BUTTON (for admin) */}
+      {currentUser!==null && currentUser.isAdmin && (
+        <Link to={"/create-post"}>
+          <button className="border-2 border-pink-500 md:hover:bg-pink-200 px-2 py-1 mt-2 rounded-md">
+            Create a Post
+          </button>
+        </Link>
+      )}
 
       {/* DELETE ACCOUNT POPUP */}
       <div

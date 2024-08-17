@@ -6,6 +6,7 @@ import About from "./pages/About";
 import Dashboard from "./pages/Dashboard";
 import Projects from "./pages/Projects";
 import Header from "./components/Header";
+import CreatePost from "./pages/CreatePost";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/projects" element={<Projects />} />
+          <Route path="/create-post" element={<CreatePost />} />
         </Routes>
       </BrowserRouter>
     </div>
