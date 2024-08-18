@@ -13,12 +13,21 @@ export const create = async (req, res) => {
     });
   }
 
+  // if post title exists:
+  const postTemp = await Post.findOne({ title: req.body.title });
+  if (postTemp) {
+    return res.status(500).json({
+      success: false,
+      message: "Please Change Title. Already Exists!",
+    });
+  }
+
   try {
     const newPost = await Post.create({
       ...req.body,
       userId: req.user.id,
     });
-    res.status(400).json({
+    res.status(200).json({
       success: true,
       message: "Post Successfully created",
       post: newPost,

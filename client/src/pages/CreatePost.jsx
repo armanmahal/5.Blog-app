@@ -10,20 +10,24 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase.js";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function CreatePost() {
-
   const [data, setData] = useState({
     title: "",
     category: "uncategorized",
     content: "",
   });
 
-
   const [image, setImage] = useState("");
   const [temporaryImageUrl, setTemporaryImageUrl] = useState("");
   const [uploadedImageUrl, setUploadedImageUrl] = useState("");
   const [uploadingImage, setUploadingImage] = useState(false);
+
+  const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -67,7 +71,7 @@ export default function CreatePost() {
     );
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (data.title === "") {
@@ -80,12 +84,44 @@ export default function CreatePost() {
       return;
     }
 
-    if (uploadedImageUrl === "") {
-      toast("Upload the Image first");
-      return;
-    }
-
     //data to backend :
+    setLoading(true);
+    try {
+      const response = await axios({
+        url: `${process.env.REACT_APP_APIBASEURL}/api/posts/create`,
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: {
+          title: data.title,
+          content: data.content,
+          category: data.category,
+          image: uploadedImageUrl,
+        },
+        withCredentials: true,
+      });
+
+      setLoading(false);
+      setData({
+        title: "",
+        category: "uncategorized",
+        content: "",
+      });
+      setImage("");
+      setUploadedImageUrl("");
+      setTemporaryImageUrl("");
+      toast(response.data.message);
+
+      // redirecting after 500ms:
+      setTimeout(() => {
+        navigate(`/post/${response.data.post._id}`);
+      }, 500);
+    } catch (error) {
+      toast(error.response.data.message);
+      console.log(error);
+      setLoading(false);
+    }
   };
 
   return (
@@ -200,7 +236,7 @@ export default function CreatePost() {
           theme="snow"
           placeholder="Start Writing..."
           className="mt-4 h-80"
-          onChange={(value) => setData({...data, content: value})}
+          onChange={(value) => setData({ ...data, content: value })}
           required
         />
 
@@ -208,9 +244,13 @@ export default function CreatePost() {
         <center>
           <button
             type="submit"
-            className="mt-16 mb-16 border-2 border-pink-500 w-[200px] rounded-md px-2 py-2 cursor-pointer md:hover:text-white md:hover:bg-pink-500 font-medium text-xl shadow-md shadow-pink-300"
+            className={`mt-16 mb-16 border-2  w-[200px] rounded-md px-2 py-2    font-medium text-xl shadow-md shadow-pink-300 ${
+              loading
+                ? "cursor-not-allowed border-pink-300"
+                : "cursor-pointer md:hover:bg-pink-500 md:hover:text-white border-pink-500"
+            }`}
           >
-            Create Post
+            {loading ? "Uploading..." : "Create Post"}
           </button>
         </center>
       </form>
