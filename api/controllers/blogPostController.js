@@ -38,10 +38,6 @@ export const create = async (req, res) => {
 };
 
 export const getPost = async (req, res) => {
-  // if not admin:
-  if (!req.user.isAdmin) {
-    return res.status(401).json({ success: false, message: "Unauthorized" });
-  }
   try {
 
     const post = await Post.findById(req.body.id)
