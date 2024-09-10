@@ -59,3 +59,20 @@ export const getPosts = async (req, res) => {
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
+
+export const deletePost = async (req, res) => {
+  // if not admin:
+  if (!req.user.isAdmin) {
+    return res.status(401).json({ success: false, message: "Unauthorized" });
+  }
+
+  try {
+    const post = await Post.findByIdAndDelete(req.body.id);
+
+    res
+      .status(200)
+      .json({ success: true, message: post.title + " successfully deleted" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};

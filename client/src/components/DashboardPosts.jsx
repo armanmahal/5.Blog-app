@@ -1,13 +1,13 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import DashboardPostCard from "./DashboardPostCard";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function DashboardPosts() {
   const [startIndex, setStartIndex] = useState(0);
-  const [limit, setLimit] = useState(2);
+  const [limit, setLimit] = useState(10);
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
 
   const [posts, setPosts] = useState([]);
 
@@ -45,11 +45,38 @@ export default function DashboardPosts() {
 
       setLoading(false);
     } catch (error) {
-      setError({ state: true, message: error.response.data.message });
       console.log(error);
       setLoading(false);
     }
   };
+
+   const handleDelete = async (id) => {
+    try {
+      const response = await axios({
+        url: `${process.env.REACT_APP_APIBASEURL}/api/posts/deletePost`,
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: {
+          id
+        },
+        withCredentials: true,
+      });
+
+      setPosts((prevPosts)=>{
+        return(
+          prevPosts.filter((post) => post._id !== id)
+        )
+      })
+
+      toast("Post Deleted!");
+
+    } catch (error) {
+      toast("Error Occured While Deleting.")
+      console.log(error);
+    }
+  }
 
   const postcards = posts.map((post) => {
     return (
@@ -59,12 +86,16 @@ export default function DashboardPosts() {
         image={post.image}
         title={post.title}
         category = {post.category}
+        delete = {handleDelete}
       />
     );
   });
 
+ 
+
   return (
     <div className="mb-20">
+      <ToastContainer/>
       <div className="min-[50%] m-1 flex-col mt-4 ml-10 ">
         <center><h1 className="mb-2 text-2xl font-bold">All Posts</h1></center>
         {postcards}
