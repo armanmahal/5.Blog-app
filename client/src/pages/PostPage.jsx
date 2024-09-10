@@ -3,6 +3,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
+import PostComment from "../components/PostComment";
 
 export default function PostPage() {
   const { id } = useParams();
@@ -18,6 +19,7 @@ export default function PostPage() {
 
   useEffect(() => {
     fetchPost();
+    getComments();
   }, []);
 
   const fetchPost = async () => {
@@ -41,6 +43,10 @@ export default function PostPage() {
   };
 
   const [userComment, setUserComment] = useState({ content: "", length: 0 });
+  const [totalComments, setTotalComments] = useState(0);
+  const [comments, setComments] = useState([]);
+
+  console.log(comments);
 
   const handleCommentChange = (e) => {
     const length = e.target.value.length;
@@ -76,10 +82,35 @@ export default function PostPage() {
         },
         withCredentials: true,
       });
+
+      setComments([response.data.newComment, ...comments]);
+
       setUserComment({ content: "", length: 0 });
+
       toast("Comment Added");
     } catch (error) {
       toast("error occured");
+      console.log(error);
+    }
+  };
+
+  const getComments = async (e) => {
+    try {
+      const response = await axios({
+        url: `${process.env.REACT_APP_APIBASEURL}/api/comments/getComments`,
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: {
+          postId: id,
+        },
+        withCredentials: true,
+      });
+
+      setTotalComments(response.data.total);
+      setComments(response.data.comments);
+    } catch (error) {
       console.log(error);
     }
   };
@@ -103,7 +134,7 @@ export default function PostPage() {
       ></div>
 
       {/* COMMENT SECTION */}
-      <h1 className="text-xl font-semibold">Comments</h1>
+      <h1 className="text-xl font-semibold">Comments ( {totalComments} )</h1>
       {currentUser && currentUser !== null ? (
         <div className="w-[94%] max-w-[800px]">
           <div className="flex items-center gap-1">
@@ -141,6 +172,23 @@ export default function PostPage() {
           Not Signed In! Sign in to Comment.
         </div>
       )}
+
+      <div className="w-[94%] max-w-[800px] flex flex-col gap-2 mt-4 mb-10">
+        {comments.map((comment) => {
+          return (
+            <PostComment
+              key={comment._id}
+              id={comment._id}
+              content={comment.content}
+              likes={comment.likes}
+              userId={comment.userId}
+              likedByYou={
+                currentUser ? comment.likedBy.includes(currentUser.id) : false
+              }
+            />
+          );
+        })}
+      </div>
     </div>
   );
 }
