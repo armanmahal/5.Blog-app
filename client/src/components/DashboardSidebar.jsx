@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { FaRegUser, FaSignOutAlt } from "react-icons/fa";
+import { FaRegUser, FaSignOutAlt, FaBook } from "react-icons/fa";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useDispatch } from "react-redux";
@@ -44,7 +44,7 @@ export default function DashboardSidebar() {
   };
 
   return (
-    <div className="w-full border-r-2 border-black flex flex-col gap-2 h-screen bg-purple-50 p-2 px-4 pt-4">
+    <div className="w-full border-r-2 border-black flex flex-col gap-2 h-screen bg-purple-50 p-2 px-4 pt-12 ">
       <ToastContainer />
       <Link
         to={"/dashboard?tab=profile"}
@@ -55,6 +55,18 @@ export default function DashboardSidebar() {
         <div className="flex items-center gap-3">
           <FaRegUser />
           <p>Profile</p>
+        </div>
+      </Link>
+
+      <Link
+        to={"/dashboard?tab=posts"}
+        className={` border-gray-500 md:hover:text-gray-600 w-full px-2 py-1 text-lg font-medium rounded-lg  ${
+          tab === "posts" ? "bg-purple-200 border-[1px]" : ""
+        }`}
+      >
+        <div className="flex items-center gap-3">
+          <FaBook />
+          <p>Posts</p>
         </div>
       </Link>
 

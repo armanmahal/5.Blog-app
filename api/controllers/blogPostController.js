@@ -47,13 +47,14 @@ export const getPosts = async (req, res) => {
   const startIndex = req.body.startIndex * limit || 0;
 
   try {
-    const posts = await Post.find()
-                            .sort({'createdAt' : -1}) // 1 for ascending, -1 for descending.
-                            .skip(startIndex)
-                            .limit(limit);
-                            
+    const total = await Post.countDocuments(); // total posts
 
-    res.status(200).json({success: true, posts});
+    const posts = await Post.find()
+      .sort({ updatedAt: -1 }) // 1 for ascending, -1 for descending.
+      .skip(startIndex)
+      .limit(limit);
+
+    res.status(200).json({ success: true, posts, total });
   } catch (error) {
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }

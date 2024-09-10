@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import DashboardSidebar from "../components/DashboardSidebar";
 import DashboardProfile from "../components/DashboardProfile";
 import { MdArrowForwardIos, MdArrowBackIos } from "react-icons/md";
+import DashboardPosts from "../components/DashboardPosts";
 
 export default function Dashboard() {
   const location = useLocation();
@@ -27,13 +28,13 @@ export default function Dashboard() {
       {/* SIDEBAR FOR SMALL SCREEN*/}
 
       <div
-        className={`w-[70%] absolute z-40 ${
+        className={`w-[70%] fixed z-40 top-0 ${
           showMenu ? "left-0" : "left-[-72%]"
         } transition-all`}
       >
         <button
           onClick={() => setShowMenu(!showMenu)}
-          className="md:hidden absolute text-3xl font-extrabold right-[-50px] top-[40vh] "
+          className="md:hidden fixed text-3xl font-extrabold left-[8px] top-[45vh] "
         >
           {showMenu ? <MdArrowBackIos /> : <MdArrowForwardIos />}
         </button>
@@ -44,6 +45,13 @@ export default function Dashboard() {
       {tab === "profile" && (
         <div className="w-full">
           <DashboardProfile />
+        </div>
+      )}
+
+      {/* POSTS */}
+      {tab === "posts" && (
+        <div className="w-full">
+          <DashboardPosts />
         </div>
       )}
     </div>
