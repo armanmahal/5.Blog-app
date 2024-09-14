@@ -7,6 +7,7 @@ import userRoute from "./routes/userRoute.js";
 import authRoute from "./routes/authRoute.js";
 import blogPostRoute from "./routes/blogPostRoute.js";
 import commentRoute from "./routes/commentRoute.js";
+import path from 'path'
 
 dotenv.config();
 
@@ -17,6 +18,8 @@ mongoose
   })
   .then(() => console.log("DATABASE SUCCESSFULLY connected "))
   .catch((err) => console.log(err));
+
+const __dirname = path.resolve();
 
 const app = express();
 
@@ -33,3 +36,9 @@ app.use("/api/user", userRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/posts", blogPostRoute);
 app.use("/api/comments", commentRoute);
+
+app.use(express.static(path.join(__dirname, '/client/build')))
+
+app.get('*', (req,res)=>{
+  res.sendfile(path.join(__dirname, 'client', 'build', 'index.html'));
+})
