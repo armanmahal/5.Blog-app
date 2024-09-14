@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FaSearch, FaGripLines, FaChevronUp } from "react-icons/fa";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 export default function Header() {
@@ -8,6 +8,8 @@ export default function Header() {
   const [navIsOpen, setNavIsOpen] = useState(false);
 
   const path = useLocation().pathname;
+
+  const navigate = useNavigate();
 
   const currentUser = useSelector((state) => state.user.currentUser);
 
@@ -17,8 +19,8 @@ export default function Header() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(search);
-    setSearch("");
+
+    navigate(`search?searchTerm=${search}`)
   };
 
   return (

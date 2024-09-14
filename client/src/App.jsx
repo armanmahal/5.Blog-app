@@ -7,6 +7,7 @@ import Dashboard from "./pages/Dashboard";
 import Header from "./components/Header";
 import CreatePost from "./pages/CreatePost";
 import PostPage from "./pages/PostPage";
+import Search from "./pages/Search";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/create-post" element={<CreatePost />} />
           <Route path="/post/:id" element={<PostPage/>} />
+          <Route path="/search" element={<Search/>}/>
         </Routes>
       </BrowserRouter>
     </div>

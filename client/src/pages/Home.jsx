@@ -11,13 +11,10 @@ export default function Home() {
     setLoading(true);
     try {
       const response = await axios({
-        url: `${process.env.REACT_APP_APIBASEURL}/api/posts/searchPosts`,
-        method: "POST",
+        url: `${process.env.REACT_APP_APIBASEURL}/api/posts/searchPosts?limit=6`,
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
-        },
-        data: {
-          limit: 6,
         },
         withCredentials: true,
       });
@@ -64,7 +61,7 @@ export default function Home() {
           {displayPosts}
         </div>
         <Link
-          to={"/search"}
+          to={"/search?searchTerm="}
           className="mt-6 text-pink-600 underline cursor-pointer text-lg font-medium"
         >
           ShowAll
