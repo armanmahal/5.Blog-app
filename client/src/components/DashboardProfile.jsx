@@ -66,7 +66,6 @@ export default function DashboardProfile() {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) => {
           setTemporaryImageUrl(downloadUrl);
           updateUserImageDatabase(downloadUrl);
-          toast("Image successfully changed");
           setImage("");
         });
       }

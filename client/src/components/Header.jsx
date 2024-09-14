@@ -22,7 +22,7 @@ export default function Header() {
   };
 
   return (
-    <div className="border-black border-b-2 bg-purple-50 px-2 py-3 flex gap-5 items-center justify-between relative">
+    <div className="border-black border-b-2 bg-purple-50 px-2 py-3 flex gap-5 items-center justify-between relative lg:pr-11">
       {/* LOGO */}
       <div className="hidden md:block text-[1.5rem] font-semibold md:pl-2 lg:pl-4">
         <span className="bg-pink-500 px-[6px] text-white mr-[1px] py-[4px] rounded-md shadow-custom-logo shadow-pink-400">
@@ -66,12 +66,6 @@ export default function Header() {
         >
           <p className=" hover:text-gray-600">About</p>
         </Link>
-        <Link
-          to={"/projects"}
-          className={path === "/projects" ? "underline underline-offset-2" : ""}
-        >
-          <p className=" hover:text-gray-600">Projects</p>
-        </Link>
         {currentUser === null ? (
           <Link
             to={"/signin"}
@@ -82,7 +76,7 @@ export default function Header() {
         ) : (
           <Link to={"/dashboard?tab=profile"}>
             <img
-              className="w-10 h-10 border-black border-2 rounded-[50%] hover:shadow-custom-logo hover:shadow-gray-400"
+              className="w-10 h-10 border-black border-2 object-cover object-center rounded-[50%] hover:shadow-custom-logo hover:shadow-gray-400"
               src={currentUser.image}
               alt="DP"
             ></img>
@@ -144,15 +138,6 @@ export default function Header() {
           }
         >
           <Link to={"/about"}>About</Link>
-        </div>
-        <div
-          className={
-            path === "/projects"
-              ? "bg-gradient-to-l from-white via-purple-200 to-white  w-full flex items-center justify-center py-1 text-lg"
-              : "w-full flex items-center justify-center py-1 text-lg"
-          }
-        >
-          <Link to={"/projects"}>Projects</Link>
         </div>
       </div>
     </div>
