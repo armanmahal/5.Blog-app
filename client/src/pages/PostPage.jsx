@@ -46,8 +46,6 @@ export default function PostPage() {
   const [totalComments, setTotalComments] = useState(0);
   const [comments, setComments] = useState([]);
 
-  console.log(comments);
-
   const handleCommentChange = (e) => {
     const length = e.target.value.length;
 
@@ -115,6 +113,58 @@ export default function PostPage() {
     }
   };
 
+  const likeComment = async (id) => {
+    if (!currentUser || currentUser == null) {
+      toast("Login First");
+      return;
+    }
+
+    try {
+      const response = await axios({
+        url: `${process.env.REACT_APP_APIBASEURL}/api/comments/likeComment/${id}`,
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+
+      setComments(
+        comments.map((comment) => {
+          return comment._id === id
+            ? {
+                ...comment,
+                likes: response.data.likes,
+                likedBy: response.data.likedBy,
+              }
+            : comment;
+        })
+      );
+
+    } catch (error) {
+      console.log(error);
+      toast("Error liking comment")
+    }
+  };
+
+  const displayComments = comments.map((comment) => {
+    return (
+      <PostComment
+        key={comment._id}
+        id={comment._id}
+        content={comment.content}
+        likes={comment.likes}
+        userId={comment.userId}
+        likedByYou={
+          currentUser && currentUser !== null
+            ? comment.likedBy.includes(currentUser.id)
+            : false
+        }
+        handleLike={likeComment}
+      />
+    );
+  });
+
   return (
     <div className=" flex flex-col items-center mt-4 px-2">
       <ToastContainer />
@@ -174,20 +224,7 @@ export default function PostPage() {
       )}
 
       <div className="w-[94%] max-w-[800px] flex flex-col gap-2 mt-4 mb-10">
-        {comments.map((comment) => {
-          return (
-            <PostComment
-              key={comment._id}
-              id={comment._id}
-              content={comment.content}
-              likes={comment.likes}
-              userId={comment.userId}
-              likedByYou={
-                currentUser ? comment.likedBy.includes(currentUser.id) : false
-              }
-            />
-          );
-        })}
+        {displayComments}
       </div>
     </div>
   );

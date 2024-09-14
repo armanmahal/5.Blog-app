@@ -33,7 +33,7 @@ export default function PostComment(props) {
       <div className="text-gray-700">~ {user}</div>
 
       <div className="flex gap-2 mt-2">
-        <button onClick={null}>
+        <button onClick={()=>props.handleLike(props.id)}>
           {props.likedByYou ? <AiFillLike /> : <AiOutlineLike />}
         </button>
         <p>{props.likes}</p>
