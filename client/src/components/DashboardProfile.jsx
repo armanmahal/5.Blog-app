@@ -149,7 +149,7 @@ export default function DashboardProfile() {
       <div className="flex flex-col items-center">
         <div className="relative">
           <img
-            className="w-[90px] h-[90px] border-black border-2 rounded-[50%]"
+            className="w-[90px] h-[90px] border-black border-2 object-cover object-center rounded-[50%]"
             src={
               temporaryImageUrl !== ""
                 ? temporaryImageUrl

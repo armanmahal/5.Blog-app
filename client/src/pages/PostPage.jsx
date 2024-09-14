@@ -192,7 +192,7 @@ export default function PostPage() {
             <img
               src={currentUser.image}
               alt="Img"
-              className="w-7 h-7 object-cover rounded-full"
+              className="w-8 h-8 object-cover object-center border-2 border-black rounded-full"
             />
             <p>{currentUser.username}</p>
           </div>
